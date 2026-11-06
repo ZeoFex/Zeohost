@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CreditCard, FileText, RefreshCw, Search, ShoppingCart } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getCustomerContext } from "@/lib/page-auth";
+import { BillingDeleteButton } from "@/components/billing-delete-button";
 import { StatusBadge } from "@/components/status-badge";
 import { EmptyState, PageHeader, SectionTitle } from "@/components/ui";
 import { formatDate, formatUsd } from "@/lib/utils";
@@ -17,7 +18,7 @@ export default async function BillingPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader kicker="Finance" title="Billing" description="Invoices, payments, and upcoming renewals." />
+      <PageHeader kicker="Finance" title="Billing" />
       <section className="card p-5">
         <SectionTitle icon={RefreshCw} title="Upcoming renewals" />
         {renewals.length ? (
@@ -48,6 +49,7 @@ export default async function BillingPage() {
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +59,13 @@ export default async function BillingPage() {
                   <td>{formatUsd(invoice.amountCents)}</td>
                   <td><StatusBadge status={invoice.status} /></td>
                   <td>{formatDate(invoice.issuedAt)}</td>
+                  <td>
+                    <BillingDeleteButton
+                      kind="invoice"
+                      id={invoice.id}
+                      label={`${invoice.number} · ${formatUsd(invoice.amountCents)}`}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -74,6 +83,7 @@ export default async function BillingPage() {
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -82,6 +92,13 @@ export default async function BillingPage() {
                   <td className="font-semibold">{formatUsd(payment.amountCents)}</td>
                   <td><StatusBadge status={payment.status} /></td>
                   <td>{formatDate(payment.createdAt)}</td>
+                  <td>
+                    <BillingDeleteButton
+                      kind="payment"
+                      id={payment.id}
+                      label={formatUsd(payment.amountCents)}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>

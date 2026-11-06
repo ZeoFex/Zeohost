@@ -69,6 +69,7 @@ export function SmsKeyForm({ projects }: { projects: { id: string; name: string 
   const router = useRouter();
   const [projectId, setProjectId] = useState(projects[0]?.id ?? "");
   const [name, setName] = useState("");
+  const [environment, setEnvironment] = useState<"DEVELOPMENT" | "PRODUCTION">("DEVELOPMENT");
   const [scopes, setScopes] = useState<string[]>([...API_KEY_SCOPES]);
   const [secret, setSecret] = useState("");
   const [error, setError] = useState("");
@@ -98,7 +99,7 @@ export function SmsKeyForm({ projects }: { projects: { id: string; name: string 
       const response = await fetch("/api/admin/sms/api-keys", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId: chosenProject, name: name.trim(), scopes }),
+        body: JSON.stringify({ projectId: chosenProject, name: name.trim(), scopes, environment }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -130,6 +131,16 @@ export function SmsKeyForm({ projects }: { projects: { id: string; name: string 
       <label className="field">
         <span>Key name</span>
         <input value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={80} />
+      </label>
+      <label className="field">
+        <span>Environment</span>
+        <select
+          value={environment}
+          onChange={(event) => setEnvironment(event.target.value as "DEVELOPMENT" | "PRODUCTION")}
+        >
+          <option value="DEVELOPMENT">Developer (zh_test_)</option>
+          <option value="PRODUCTION">Production (zh_live_)</option>
+        </select>
       </label>
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-[var(--muted)]">Scopes</legend>
@@ -227,7 +238,7 @@ export function SmsSenderForm({ projects }: { projects: { id: string; name: stri
     <form onSubmit={onSubmit} className="card space-y-3 p-5">
       <h2 className="font-bold text-[var(--navy)]">Add sender ID</h2>
       <p className="text-sm text-[var(--muted)]">
-        This stores the label MyDomain will send. It does not register the sender with a mobile network.
+        This stores the label Zeohost will send. It does not register the sender with a mobile network.
       </p>
       <label className="field">
         <span>Project</span>
@@ -241,7 +252,7 @@ export function SmsSenderForm({ projects }: { projects: { id: string; name: stri
       </label>
       <label className="field">
         <span>Sender ID</span>
-        <input value={value} onChange={(event) => setValue(event.target.value)} required maxLength={11} placeholder="MyDomain" />
+        <input value={value} onChange={(event) => setValue(event.target.value)} required maxLength={11} placeholder="Zeohost" />
       </label>
       {error ? <p className="text-sm font-semibold text-[var(--danger)]">{error}</p> : null}
       <button className="btn btn-primary" disabled={busy || !projects.length} type="submit">

@@ -36,7 +36,7 @@ export async function uploadAvatarImage(input: {
 }) {
   ensureConfig();
   const result = await cloudinary.uploader.upload(input.dataUri, {
-    folder: "mydomain/avatars",
+    folder: "zeohost/avatars",
     public_id: input.userId,
     overwrite: true,
     resource_type: "image",

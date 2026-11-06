@@ -57,7 +57,7 @@ function mapTldPrice(row: NamecomTldPrice) {
 }
 
 export async function syncNamecomPricing(options?: { resetMargins?: boolean }) {
-  if (!isNamecomConfigured()) throw new Error("name.com is not configured.");
+  if (!isNamecomConfigured()) throw new Error("Domain registration is temporarily unavailable.");
   const resetMargins = options?.resetMargins === true;
 
   const remote = new Map<string, NonNullable<ReturnType<typeof mapTldPrice>>>();
@@ -135,7 +135,7 @@ export async function syncNamecomPricing(options?: { resetMargins?: boolean }) {
 }
 
 export async function syncNamecomDomains() {
-  if (!isNamecomConfigured()) throw new Error("name.com is not configured.");
+  if (!isNamecomConfigured()) throw new Error("Domain registration is temporarily unavailable.");
   let page = 1;
   let synced = 0;
   for (;;) {
@@ -180,7 +180,7 @@ function transferStatusToLocal(status?: string) {
 }
 
 export async function syncNamecomTransfers() {
-  if (!isNamecomConfigured()) throw new Error("name.com is not configured.");
+  if (!isNamecomConfigured()) throw new Error("Domain registration is temporarily unavailable.");
   let page = 1;
   let synced = 0;
   for (;;) {

@@ -12,7 +12,7 @@ import {
 
 export type Theme = "light" | "dark";
 
-const STORAGE_KEY = "mydomain-theme";
+const STORAGE_KEY = "zeohost-theme";
 
 type ThemeContextValue = {
   theme: Theme;

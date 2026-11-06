@@ -14,7 +14,10 @@ export function handleRouteError(error: unknown) {
     return jsonError(error.issues[0]?.message ?? "Invalid input", 400);
   }
   if (error instanceof NamecomError) {
-    return jsonError(error.message, error.status >= 500 ? 502 : error.status);
+    const message = error.message
+      .replace(/\bname\.com\b/gi, "the domain service")
+      .replace(/\bnamecom\b/gi, "the domain service");
+    return jsonError(message, error.status >= 500 ? 502 : error.status);
   }
   if (error instanceof GithubError) {
     return jsonError(error.message, error.status >= 500 ? 502 : error.status);
@@ -40,7 +43,7 @@ export function handleRouteError(error: unknown) {
       "Enter a name like myshop",
       "Enter a full domain, like mybusiness.com",
       "Plan not found",
-      "name.com is not configured.",
+      "Domain registration is temporarily unavailable.",
       "No auth code is available for this domain yet.",
       "That domain is available to register. Add it from search instead.",
       "That domain is already on this platform.",

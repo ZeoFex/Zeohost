@@ -46,11 +46,7 @@ export default async function HostingDetailPage({
       <PageHeader
         kicker={account.isTrial ? "Preview hosting" : "Server status"}
         title={account.githubRepo ?? account.plan.name}
-        description={
-          account.isTrial
-            ? "Live preview for your GitHub project — static sites and SSR apps with databases. Buy a plan within two weeks to keep it live."
-            : `${account.server.name} · ${account.server.location}`
-        }
+        description={account.isTrial ? undefined : `${account.server.name} · ${account.server.location}`}
         actions={
           <span className="flex items-center gap-2">
             {account.isTrial ? <StatusBadge status="TRIAL" /> : null}

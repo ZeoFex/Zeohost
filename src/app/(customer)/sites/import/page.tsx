@@ -23,11 +23,7 @@ export default async function ImportSitePage({
         <ArrowLeft className="h-4 w-4" />
         All repositories
       </Link>
-      <PageHeader
-        kicker="Import"
-        title={repo}
-        description="Configure the project, wait for GitHub checks, then deploy to 14-day preview hosting."
-      />
+      <PageHeader kicker="Import" title={repo} />
       {github.connected ? (
         <GithubImportForm repo={repo} />
       ) : (

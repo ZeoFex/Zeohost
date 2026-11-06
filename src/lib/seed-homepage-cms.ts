@@ -1,5 +1,5 @@
 export const DEFAULT_HOME_STATS = [
-  { value: "Live", label: "name.com pricing" },
+  { value: "Live", label: "domain pricing" },
   { value: "600+", label: "domain extensions" },
   { value: "24/7", label: "dashboard access" },
   { value: "DNS", label: "point anywhere" },

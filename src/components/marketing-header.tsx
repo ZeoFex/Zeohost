@@ -10,7 +10,7 @@ import { useTheme } from "@/components/theme-provider";
 
 const links = [
   { href: "/search", label: "Domains" },
-  { href: "/#sms", label: "SMS & OTP" },
+  { href: "/sms", label: "SMS & OTP" },
   { href: "/#partners", label: "Products" },
   { href: "/#connect", label: "Connect" },
 ];
@@ -29,7 +29,7 @@ export function MarketingHeader({ cartCount = 0 }: { cartCount?: number }) {
   return (
     <header className="nm-header">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-        <Link href="/" aria-label="myDomain home">
+        <Link href="/" aria-label="Zeohost home">
           <Brand light={brandLight} />
         </Link>
         <nav className="hidden items-center gap-8 text-sm font-semibold md:flex">

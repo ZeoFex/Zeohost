@@ -36,7 +36,6 @@ export function DeveloperProjectForm() {
   return (
     <form onSubmit={onSubmit} className="card space-y-3 p-5">
       <h2 className="font-bold text-[var(--navy)]">New project</h2>
-      <p className="text-sm text-[var(--muted)]">A project owns keys, sender IDs, and usage for one app.</p>
       <label className="field">
         <span>Project name</span>
         <input value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={80} placeholder="Checkout app" />
@@ -101,8 +100,11 @@ export function DeveloperKeyForm({ projects }: { projects: { id: string; name: s
 
   return (
     <form onSubmit={onSubmit} className="card space-y-3 p-5">
-      <h2 className="font-bold text-[var(--navy)]">Create API key</h2>
-      <p className="text-sm text-[var(--muted)]">Copy the secret now. It is not shown again.</p>
+      <h2 className="font-bold text-[var(--navy)]">Developer API key</h2>
+      <p className="text-sm text-[var(--muted)]">
+        Creates a <code className="rounded bg-[var(--field-bg)] px-1">zh_test_</code> key. Production keys are issued after
+        we connect a live SMS provider — open Support to request one.
+      </p>
       {projects.length ? (
         <label className="field">
           <span>Project</span>
@@ -115,11 +117,11 @@ export function DeveloperKeyForm({ projects }: { projects: { id: string; name: s
           </select>
         </label>
       ) : (
-        <p className="text-sm font-semibold text-[var(--muted)]">Create a project on the left, then the key form will use it.</p>
+        <p className="text-sm font-semibold text-[var(--muted)]">Create a project first.</p>
       )}
       <label className="field">
         <span>Key name</span>
-        <input value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={80} placeholder="Production" />
+        <input value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={80} placeholder="Local testing" />
       </label>
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-[var(--muted)]">Scopes</legend>

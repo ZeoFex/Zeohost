@@ -12,7 +12,7 @@ const PORT_MIN = Number(process.env.RUNTIME_PORT_MIN ?? 4100);
 const PORT_MAX = Number(process.env.RUNTIME_PORT_MAX ?? 4599);
 
 export function runtimeContainerName(slug: string) {
-  return `mydomain-run-${slug}`;
+  return `zeohost-run-${slug}`;
 }
 
 function deploymentEnv(envVarsJson: string) {
@@ -79,7 +79,7 @@ export async function startRuntimeContainer(input: {
   await stopRuntimeContainer(input.slug);
 
   const workdir = `/app${input.rootDirectory ? `/${input.rootDirectory}` : ""}`;
-  const envDir = await mkdtemp(join(tmpdir(), "mydomain-run-env-"));
+  const envDir = await mkdtemp(join(tmpdir(), "zeohost-run-env-"));
   const envFile = join(envDir, "runtime.env");
   await writeFile(
     envFile,

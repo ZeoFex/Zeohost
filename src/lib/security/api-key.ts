@@ -4,7 +4,9 @@ import { isApiKeyScope, type ApiKeyScope } from "@/lib/security/api-scopes";
 
 export { API_KEY_SCOPES, isApiKeyScope, type ApiKeyScope } from "@/lib/security/api-scopes";
 
-const TOKEN = /^md_live_([a-f0-9]{8})_(.+)$/;
+export type ApiKeyEnvironment = "DEVELOPMENT" | "PRODUCTION";
+
+const TOKEN = /^(?:zh|md)_(live|test)_([a-f0-9]{8})_(.+)$/;
 
 export function normalizeScopes(values: string[]) {
   const scopes = [...new Set(values.filter(isApiKeyScope))];
@@ -13,15 +15,24 @@ export function normalizeScopes(values: string[]) {
 
 export function parseApiToken(token: string) {
   const match = token.trim().match(TOKEN);
-  if (!match || match[2].length < 20) return null;
-  return { prefix: `md_live_${match[1]}`, secret: match[2] };
+  if (!match || match[3].length < 20) return null;
+  const kind = match[1];
+  const hex = match[2];
+  const secret = match[3];
+  const brand = token.trim().startsWith("md_") ? "md" : "zh";
+  return {
+    prefix: `${brand}_${kind}_${hex}`,
+    secret,
+    environment: (kind === "live" ? "PRODUCTION" : "DEVELOPMENT") as ApiKeyEnvironment,
+  };
 }
 
-export function createApiKeyMaterial() {
-  const prefix = `md_live_${randomBytes(4).toString("hex")}`;
+export function createApiKeyMaterial(environment: ApiKeyEnvironment = "DEVELOPMENT") {
+  const kind = environment === "PRODUCTION" ? "live" : "test";
+  const prefix = `zh_${kind}_${randomBytes(4).toString("hex")}`;
   const secret = randomBytes(24).toString("base64url");
   const token = `${prefix}_${secret}`;
-  return { prefix, secret, token, secretHash: hashApiSecret(secret) };
+  return { prefix, secret, token, secretHash: hashApiSecret(secret), environment };
 }
 
 export function hashApiSecret(secret: string) {

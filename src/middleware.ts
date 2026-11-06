@@ -49,8 +49,8 @@ export async function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
-  const customerToken = request.cookies.get("mydomain_session")?.value;
-  const adminToken = request.cookies.get("mydomain_admin_session")?.value;
+  const customerToken = request.cookies.get("zeohost_session")?.value;
+  const adminToken = request.cookies.get("zeohost_admin_session")?.value;
   const [customerRole, adminRole] = await Promise.all([
     tokenRole(customerToken),
     tokenRole(adminToken),
@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
       const url = new URL("/admin/login", request.url);
       url.searchParams.set("next", pathname);
       const response = NextResponse.redirect(url);
-      if (adminToken) response.cookies.delete("mydomain_admin_session");
+      if (adminToken) response.cookies.delete("zeohost_admin_session");
       return withSecurityHeaders(response);
     }
   }
@@ -71,7 +71,7 @@ export async function middleware(request: NextRequest) {
       const url = new URL("/login", request.url);
       url.searchParams.set("next", pathname);
       const response = NextResponse.redirect(url);
-      if (customerToken) response.cookies.delete("mydomain_session");
+      if (customerToken) response.cookies.delete("zeohost_session");
       return withSecurityHeaders(response);
     }
   }

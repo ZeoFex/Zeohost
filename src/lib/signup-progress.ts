@@ -1,5 +1,5 @@
-const DRAFT_KEY = "mydomain_signup_draft";
-const PENDING_KEY = "mydomain_signup_pending";
+const DRAFT_KEY = "zeohost_signup_draft";
+const PENDING_KEY = "zeohost_signup_pending";
 
 export type SignupDraft = {
   name: string;

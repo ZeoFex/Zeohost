@@ -8,6 +8,18 @@ export async function ensureHomepageCms() {
   await seedHomepageCms(prisma as never);
 }
 
+function publicHomeStats(raw: string | null | undefined): HomeStat[] {
+  const stats = parseJson<HomeStat[]>(raw ?? "[]", DEFAULT_HOME_STATS);
+  return stats.map((row) => ({
+    ...row,
+    label: row.label
+      .replace(/\bname\.com\b/gi, "domain")
+      .replace(/\bnamecom\b/gi, "domain")
+      .replace(/\s+/g, " ")
+      .trim(),
+  }));
+}
+
 export async function getHomepageCms() {
   await ensureHomepageCms();
   const home = await prisma.cmsHome.findUnique({ where: { slug: "home" } });
@@ -17,7 +29,7 @@ export async function getHomepageCms() {
   });
   return {
     home: home ?? DEFAULT_HOME,
-    stats: parseJson<HomeStat[]>(home?.statsJson ?? "[]", DEFAULT_HOME_STATS),
+    stats: publicHomeStats(home?.statsJson),
     partners,
   };
 }

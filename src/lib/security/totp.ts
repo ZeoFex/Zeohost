@@ -5,8 +5,8 @@ import { encryptSecret, decryptSecret } from "@/lib/crypto";
 import { hashPassword, verifyPassword } from "@/lib/session";
 import { getAppUrl } from "@/lib/env";
 
-const ADMIN_ISSUER = "myDomain Admin";
-const CUSTOMER_ISSUER = "myDomain";
+const ADMIN_ISSUER = "Zeohost Admin";
+const CUSTOMER_ISSUER = "Zeohost";
 
 export function generateTotpSecret() {
   const secret = new OTPAuth.Secret({ size: 20 });
@@ -108,6 +108,6 @@ export function adminIssuerLabel() {
   try {
     return new URL(getAppUrl()).hostname;
   } catch {
-    return "mydomain";
+    return "zeohost";
   }
 }

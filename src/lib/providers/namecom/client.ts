@@ -31,11 +31,11 @@ export async function namecomRequest<T>(
 ): Promise<T> {
   const config = getNamecomConfig();
   if (!config) {
-    throw new NamecomError("name.com API credentials are missing.", 503);
+    throw new NamecomError("Domain registration is temporarily unavailable.", 503);
   }
   if (Date.now() < namecomPausedUntil) {
     throw new NamecomError(
-      "name.com is limiting domain checks right now. Wait a minute and search again.",
+      "Domain checks are limited right now. Wait a minute and search again.",
       429,
     );
   }
@@ -68,13 +68,13 @@ export async function namecomRequest<T>(
     if (response.status === 429) {
       pauseAfterRateLimit(response.headers.get("x-ratelimit-reset"));
       throw new NamecomError(
-        "name.com is limiting domain checks right now. Wait a minute and search again.",
+        "Domain checks are limited right now. Wait a minute and search again.",
         429,
       );
     }
     const message =
       (typeof data.message === "string" && data.message) ||
-      `name.com request failed (${response.status})`;
+      `Domain request failed (${response.status})`;
     const details = typeof data.details === "string" ? data.details : undefined;
     throw new NamecomError(message, response.status, details);
   }

@@ -20,7 +20,7 @@ const exec = promisify(execFile);
 const BUILD_IMAGE = process.env.BUILD_IMAGE?.trim() || "node:22-alpine";
 const ARTIFACT_ROOT = join(process.cwd(), "var", "deployments");
 const RUNTIME_ROOT = join(process.cwd(), "var", "runtimes");
-const NPM_CACHE_VOLUME = "mydomain-npm-cache";
+const NPM_CACHE_VOLUME = "zeohost-npm-cache";
 
 const outputDirectories: Record<string, string> = {
   "Next.js": ".next",
@@ -127,7 +127,7 @@ export async function runContainerBuild(input: { hostingId: string; deploymentId
   const runtimeMode = startCommand ? "server" : "static";
 
   let log = "Starting isolated build container...";
-  const workspace = await mkdtemp(join(tmpdir(), "mydomain-build-"));
+  const workspace = await mkdtemp(join(tmpdir(), "zeohost-build-"));
   const archive = join(workspace, "source.tar.gz");
   const source = join(workspace, "source");
   const envFile = join(workspace, "build.env");
@@ -170,7 +170,7 @@ export async function runContainerBuild(input: { hostingId: string; deploymentId
           "--memory=2g",
           "--pids-limit=512",
           "--name",
-          `mydomain-build-${input.deploymentId}`,
+          `zeohost-build-${input.deploymentId}`,
           "--tmpfs",
           "/tmp:rw,nosuid,nodev,size=512m",
           "--env-file",
@@ -325,7 +325,7 @@ export async function removeDeploymentArtifacts(slug: string) {
 
 export async function stopDeploymentContainer(deploymentId: string) {
   if (!/^[A-Za-z0-9_-]+$/.test(deploymentId)) return;
-  await exec("docker", ["rm", "--force", `mydomain-build-${deploymentId}`], { timeout: 10_000 }).catch(
+  await exec("docker", ["rm", "--force", `zeohost-build-${deploymentId}`], { timeout: 10_000 }).catch(
     () => undefined,
   );
 }

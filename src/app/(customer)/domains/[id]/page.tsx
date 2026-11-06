@@ -32,11 +32,7 @@ export default async function DomainDetailPage({
         <ArrowLeft className="h-4 w-4" />
         All domains
       </Link>
-      <PageHeader
-        kicker="Domain"
-        title={domain.name}
-        description="Manage registration details, nameservers, and DNS records for this domain."
-      />
+      <PageHeader kicker="Domain" title={domain.name} />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Info icon={Globe} label="Status" value={<StatusBadge status={domain.status} />} />
         <Info icon={Calendar} label="Registered" value={formatDateLong(domain.registeredAt)} />
@@ -46,9 +42,9 @@ export default async function DomainDetailPage({
       {canManageDns ? (
         <ConnectVercelPanel domainId={domain.id} domainName={domain.name} />
       ) : null}
-      <section className="card p-5">
-        <SectionTitle icon={Server} title="Nameservers" />
-        {nameservers.length ? (
+      {nameservers.length ? (
+        <section className="card p-5">
+          <SectionTitle icon={Server} title="Nameservers" />
           <div className="mt-3 space-y-2 text-sm">
             {nameservers.map((ns) => (
               <p
@@ -59,14 +55,8 @@ export default async function DomainDetailPage({
               </p>
             ))}
           </div>
-        ) : (
-          <p className="mt-3 text-sm text-[var(--muted)]">
-            {domain.status === "PENDING_REGISTRATION" || domain.status === "PENDING_TRANSFER"
-              ? "Nameservers will appear here once registration finishes."
-              : "No nameservers on file yet. Add them in Advanced below when you are ready."}
-          </p>
-        )}
-      </section>
+        </section>
+      ) : null}
       <DomainActions
         domainId={domain.id}
         domainName={domain.name}

@@ -580,6 +580,11 @@ enum ApiKeyStatus {
   EXPIRED
 }
 
+enum ApiKeyEnvironment {
+  DEVELOPMENT
+  PRODUCTION
+}
+
 enum SmsMessageType {
   SMS
   OTP
@@ -607,7 +612,7 @@ model ApiProject {
   customer      Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
   name          String
   status        ApiProjectStatus @default(ACTIVE)
-  defaultSender String           @default("MyDomain")
+  defaultSender String           @default("Zeohost")
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 
@@ -623,25 +628,27 @@ model ApiProject {
 
 /// Secret is stored as an HMAC. The raw key is returned only when it is created or rotated.
 model ApiKey {
-  id         String       @id @default(cuid())
-  projectId  String
-  project    ApiProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  name       String
-  prefix     String       @unique
-  secretHash String
-  scopesJson String       @default("[]")
-  status     ApiKeyStatus @default(ACTIVE)
-  expiresAt  DateTime?
-  lastUsedAt DateTime?
-  revokedAt  DateTime?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id          String             @id @default(cuid())
+  projectId   String
+  project     ApiProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name        String
+  prefix      String             @unique
+  secretHash  String
+  scopesJson  String             @default("[]")
+  environment ApiKeyEnvironment  @default(DEVELOPMENT)
+  status      ApiKeyStatus       @default(ACTIVE)
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
 
   messages     SmsMessage[]
   usageRecords UsageRecord[]
 
   @@index([projectId])
   @@index([status])
+  @@index([environment])
 }
 
 model SmsMessage {

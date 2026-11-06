@@ -234,3 +234,73 @@ export async function customerBilling(customerId: string) {
   ]);
   return { orders, payments, invoices, subscriptions, renewals };
 }
+
+export async function deleteCustomerOrder(customerId: string, orderId: string, actorId?: string) {
+  const order = await prisma.order.findFirst({
+    where: { id: orderId, customerId },
+    include: { items: true, payment: true, invoice: true },
+  });
+  if (!order) return null;
+
+  await prisma.$transaction(async (tx) => {
+    if (order.payment) {
+      await tx.payment.update({ where: { id: order.payment.id }, data: { orderId: null } });
+    }
+    if (order.invoice) {
+      await tx.invoice.update({ where: { id: order.invoice.id }, data: { orderId: null } });
+    }
+    await tx.domainRegistration.updateMany({ where: { orderId: order.id }, data: { orderId: null } });
+    await tx.order.delete({ where: { id: order.id } });
+  });
+
+  await audit({
+    actorId: actorId ?? null,
+    action: "order.deleted",
+    entityType: "Order",
+    entityId: order.id,
+    metadata: {
+      totalCents: order.totalCents,
+      status: order.status,
+      items: order.items.map((item) => item.description),
+    },
+  });
+
+  return { id: order.id };
+}
+
+export async function deleteCustomerInvoice(customerId: string, invoiceId: string, actorId?: string) {
+  const invoice = await prisma.invoice.findFirst({ where: { id: invoiceId, customerId } });
+  if (!invoice) return null;
+
+  await prisma.invoice.delete({ where: { id: invoice.id } });
+  await audit({
+    actorId: actorId ?? null,
+    action: "invoice.deleted",
+    entityType: "Invoice",
+    entityId: invoice.id,
+    metadata: {
+      number: invoice.number,
+      amountCents: invoice.amountCents,
+      status: invoice.status,
+    },
+  });
+  return { id: invoice.id };
+}
+
+export async function deleteCustomerPayment(customerId: string, paymentId: string, actorId?: string) {
+  const payment = await prisma.payment.findFirst({ where: { id: paymentId, customerId } });
+  if (!payment) return null;
+
+  await prisma.payment.delete({ where: { id: payment.id } });
+  await audit({
+    actorId: actorId ?? null,
+    action: "payment.deleted",
+    entityType: "Payment",
+    entityId: payment.id,
+    metadata: {
+      amountCents: payment.amountCents,
+      status: payment.status,
+    },
+  });
+  return { id: payment.id };
+}

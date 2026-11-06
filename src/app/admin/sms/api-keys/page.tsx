@@ -22,11 +22,7 @@ export default async function AdminApiKeysPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        kicker="Messaging"
-        title="API keys"
-        description="Keys are hashed. A secret is shown only when you create or rotate it."
-      />
+      <PageHeader kicker="Messaging" title="API keys" />
       <div className="grid gap-4 lg:grid-cols-2">
         <SmsProjectForm
           customers={customers.map((customer) => ({
@@ -44,6 +40,7 @@ export default async function AdminApiKeysPage() {
               <tr>
                 <th>Name</th>
                 <th>Prefix</th>
+                <th>Environment</th>
                 <th>Project</th>
                 <th>Scopes</th>
                 <th>Status</th>
@@ -56,6 +53,7 @@ export default async function AdminApiKeysPage() {
                 <tr key={key.id}>
                   <td className="font-semibold">{key.name}</td>
                   <td className="font-mono text-xs">{key.prefix}</td>
+                  <td>{key.environment === "PRODUCTION" ? "Production" : "Developer"}</td>
                   <td>{key.project.name}</td>
                   <td className="text-xs">{parseScopes(key.scopesJson).join(", ")}</td>
                   <td>

@@ -18,7 +18,6 @@ export default async function CartPage() {
       <PageHeader
         kicker="Checkout"
         title="Your cart"
-        description="Review items, remove anything you do not need, then pay."
         actions={
           <Link href="/search" className="btn btn-ghost">
             <Search className="h-4 w-4" />

@@ -19,7 +19,7 @@ export async function githubRequest<T = GithubJson>(
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${token}`,
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "myDomain",
+      "User-Agent": "Zeohost",
       ...init?.headers,
     },
   });
@@ -134,7 +134,7 @@ export async function githubArchive(token: string, owner: string, repo: string, 
         Accept: "application/vnd.github+json",
         Authorization: `Bearer ${token}`,
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "myDomain",
+        "User-Agent": "Zeohost",
       },
     },
   );

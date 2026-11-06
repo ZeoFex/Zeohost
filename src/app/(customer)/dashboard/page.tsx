@@ -23,9 +23,8 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        kicker="Customer dashboard"
+        kicker="Dashboard"
         title={`Welcome back, ${user.name.split(" ")[0]}`}
-        description="Search, buy, and manage domains. Use SMS & OTP to send verification codes and text messages from your own apps."
         actions={
           <>
             <Link href="/search" className="btn btn-hot">
@@ -64,7 +63,6 @@ export default async function DashboardPage() {
             >
               <div>
                 <span className="font-semibold">{domain.name}</span>
-                <p className="text-sm text-[var(--muted)]">Open to connect Vercel DNS</p>
               </div>
               <span className="flex items-center gap-2">
                 <StatusBadge

@@ -19,11 +19,7 @@ export default async function DeveloperSendersPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        kicker="SMS & OTP"
-        title="Sender IDs"
-        description="These labels are stored for your project. They are not registered with a carrier."
-      />
+      <PageHeader kicker="SMS & OTP" title="Sender IDs" />
       <DeveloperNav />
       <DeveloperSenderForm projects={projects.map((project) => ({ id: project.id, name: project.name }))} />
       {senders.length ? (

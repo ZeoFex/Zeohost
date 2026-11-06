@@ -24,6 +24,7 @@ export async function POST(request: Request) {
       projectId: body.projectId,
       name: body.name,
       scopes: body.scopes,
+      environment: "DEVELOPMENT",
       actorId: session.sub,
     });
     return jsonOk({ key });

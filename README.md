@@ -1,13 +1,13 @@
-# myDomain
+# Zeohost
 
-White-label domain + hosting reseller platform. Customers buy from **myDomain**. The backend talks to a provider through a replaceable interface. Right now that provider is **mock data only**.
+White-label domain + hosting reseller platform. Customers buy from **Zeohost**. The backend talks to a provider through a replaceable interface. Right now that provider is **mock data only**.
 
 No ResellerClub, OpenSRS, Namecheap, GoDaddy, Cloudflare, cPanel, WHM, or live payment APIs are integrated.
 
 ## 1. Project architecture
 
 ```
-                    myDomain
+                    Zeohost
                          │
               ┌──────────┴──────────┐
               │                     │
@@ -101,7 +101,7 @@ Later you add `ResellerClubDomainProvider` (or OpenSRS, etc.) and a `case "resel
 
 ## 6. Admin workflow
 
-Separate cookie (`mydomain_admin_session`). Admin can view customers, domains, hosting, servers, pricing (including wholesale + margin), providers, orders, payments, invoices, renewals, support, audit logs, and system health.
+Separate cookie (`zeohost_admin_session`). Admin can view customers, domains, hosting, servers, pricing (including wholesale + margin), providers, orders, payments, invoices, renewals, support, audit logs, and system health.
 
 ## 7. Authentication / authorization
 
@@ -241,4 +241,4 @@ These are capabilities, not guessed endpoints. Exact URLs come from the provider
 
 - Email and in-app notices use `NotificationProvider`.
 - Phone OTP and outbound SMS are the SMS & OTP product. See [docs/sms-otp-api.md](docs/sms-otp-api.md). Delivery is a development mock until a real network connector is added.
-# myDomain
+# Zeohost

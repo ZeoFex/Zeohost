@@ -4,7 +4,7 @@ import { ThemeBrand } from "@/components/theme-brand";
 export function MarketingFooter() {
   return (
     <footer className="nm-footer">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-3">
         <div>
           <ThemeBrand />
           <p className="nm-text-muted mt-4 max-w-xs text-sm leading-6">
@@ -23,8 +23,11 @@ export function MarketingFooter() {
             <Link className="nm-link" href="/#connect">
               Connect hosting
             </Link>
-            <Link className="nm-link" href="/docs">
+            <Link className="nm-link" href="/sms">
               SMS &amp; OTP
+            </Link>
+            <Link className="nm-link" href="/sms/docs">
+              SMS API docs
             </Link>
             <Link className="nm-link" href="/register">
               Create account
@@ -37,9 +40,6 @@ export function MarketingFooter() {
             <Link className="nm-link" href="/login">
               Customer login
             </Link>
-            <Link className="nm-link" href="/admin/login">
-              Admin login
-            </Link>
             <Link className="nm-link" href="/support">
               Support
             </Link>
@@ -48,15 +48,9 @@ export function MarketingFooter() {
             </Link>
           </div>
         </div>
-        <div>
-          <p className="nm-text-faint text-xs font-bold uppercase tracking-[0.16em]">Registrar</p>
-          <p className="nm-text-muted mt-4 text-sm leading-6">
-            Registrations run through name.com. Homepage images and partner cards are managed in Admin → CMS.
-          </p>
-        </div>
       </div>
       <div className="nm-text-faint border-t py-5 text-center text-xs" style={{ borderColor: "var(--nm-border)" }}>
-        © {new Date().getFullYear()} myDomain. All rights reserved.
+        © {new Date().getFullYear()} Zeohost. All rights reserved.
       </div>
     </footer>
   );

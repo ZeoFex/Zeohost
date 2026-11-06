@@ -10,7 +10,7 @@ describe("mock sms connector", () => {
       messageId: "msg_1",
       to: "+233241234567",
       body: "Your verification code is 123456",
-      senderId: "MyDomain",
+      senderId: "Zeohost",
       metadata: {},
     });
     assert.equal(sent.status, "SENT");
@@ -29,7 +29,7 @@ describe("mock sms connector", () => {
       messageId: "msg_2",
       to: "+233241234567",
       body: "hello",
-      senderId: "MyDomain",
+      senderId: "Zeohost",
       metadata: { mockOutcome: "temporary" },
     });
     assert.equal(result.retryable, true);

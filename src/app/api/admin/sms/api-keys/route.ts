@@ -8,6 +8,7 @@ const schema = z.object({
   projectId: z.string().min(1, "Choose a project before creating a key."),
   name: z.string().trim().min(2, "Key name must be at least 2 characters.").max(80),
   scopes: z.array(z.string()).min(1, "Choose at least one permission."),
+  environment: z.enum(["DEVELOPMENT", "PRODUCTION"]).default("DEVELOPMENT"),
 });
 
 export async function POST(request: Request) {
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
       projectId: body.projectId,
       name: body.name,
       scopes: body.scopes,
+      environment: body.environment,
       actorId: admin.sub,
     });
     return jsonOk({ key });

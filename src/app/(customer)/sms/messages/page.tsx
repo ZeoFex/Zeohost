@@ -19,11 +19,7 @@ export default async function DeveloperMessagesPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        kicker="SMS & OTP"
-        title="Messages"
-        description="Your queued, delivered, and failed SMS and OTP messages. Destinations are masked."
-      />
+      <PageHeader kicker="SMS & OTP" title="Messages" />
       <DeveloperNav />
       {messages.length ? (
         <div className="card table-wrap">

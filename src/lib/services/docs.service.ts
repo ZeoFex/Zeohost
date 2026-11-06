@@ -2,20 +2,27 @@ import { prisma } from "@/lib/db";
 import { DEFAULT_SMS_DOCS, SMS_DOCS_PRODUCT } from "@/lib/seed-sms-docs";
 
 export async function ensureSmsDocs() {
-  const count = await prisma.cmsDocPage.count({ where: { product: SMS_DOCS_PRODUCT } });
-  if (count > 0) return;
-  await prisma.cmsDocPage.createMany({
-    data: DEFAULT_SMS_DOCS.map((page) => ({
-      product: SMS_DOCS_PRODUCT,
-      slug: page.slug,
-      title: page.title,
-      summary: page.summary,
-      body: page.body,
-      sortOrder: page.sortOrder,
-      published: true,
-    })),
-    skipDuplicates: true,
-  });
+  for (const page of DEFAULT_SMS_DOCS) {
+    await prisma.cmsDocPage.upsert({
+      where: { product_slug: { product: SMS_DOCS_PRODUCT, slug: page.slug } },
+      create: {
+        product: SMS_DOCS_PRODUCT,
+        slug: page.slug,
+        title: page.title,
+        summary: page.summary,
+        body: page.body,
+        sortOrder: page.sortOrder,
+        published: true,
+      },
+      update: {
+        title: page.title,
+        summary: page.summary,
+        body: page.body,
+        sortOrder: page.sortOrder,
+        published: true,
+      },
+    });
+  }
 }
 
 export async function getPublishedSmsDocs() {

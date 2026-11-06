@@ -62,9 +62,6 @@ export default async function SearchPage({
           <div>
             <p className="page-kicker">Domains</p>
             <h1 className="text-3xl font-extrabold tracking-tight text-[var(--navy)]">Find your domain</h1>
-            <p className="mt-1 max-w-2xl text-[var(--muted)]">
-              Search by name, then browse by category — Popular, Tech, Shop, Africa, and more.
-            </p>
           </div>
           <DomainSearch
             initialQuery={q ?? ""}

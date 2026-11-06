@@ -4,8 +4,8 @@ import bcrypt from "bcryptjs";
 import type { Role } from "@/lib/models";
 import { authSecretBytes } from "@/lib/security/auth-secret";
 
-export const SESSION_COOKIE = "mydomain_session";
-export const ADMIN_SESSION_COOKIE = "mydomain_admin_session";
+export const SESSION_COOKIE = "zeohost_session";
+export const ADMIN_SESSION_COOKIE = "zeohost_admin_session";
 
 export type SessionPayload = {
   sub: string;

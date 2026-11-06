@@ -545,7 +545,7 @@ export function DomainSearch({
                   void addTransfer();
                 }}
               >
-                <p className="text-sm font-semibold">Transfer {transferDomain} into myDomain</p>
+                <p className="text-sm font-semibold">Transfer {transferDomain} into Zeohost</p>
                 <input
                   className="w-full rounded-xl border border-[var(--line)] bg-white px-3 py-2"
                   placeholder="Authorization code from the current registrar"

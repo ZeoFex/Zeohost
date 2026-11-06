@@ -22,7 +22,7 @@ export function smsConfig() {
     maxRetries: intEnv("SMS_MAX_RETRIES", 5, 1, 10),
     maxPerProject: intEnv("SMS_MAX_PER_PROJECT", 60, 1, 10_000),
     windowMs: intEnv("SMS_WINDOW_SECONDS", 60, 10, 3600) * 1000,
-    defaultSender: (process.env.SMS_DEFAULT_SENDER ?? "MyDomain").trim() || "MyDomain",
+    defaultSender: (process.env.SMS_DEFAULT_SENDER ?? "Zeohost").trim() || "Zeohost",
   };
 }
 

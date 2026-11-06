@@ -29,7 +29,7 @@ export async function notifyAccountCreated(input: { name: string; phone: string 
     customerId: key.project.customerId,
     apiKeyId: key.id,
     to: phone,
-    body: `MyDomain: ${name} created an account with this phone number.`,
+    body: `Zeohost: ${name} created an account with this phone number.`,
     senderId: key.project.defaultSender,
     type: "SMS",
     purpose: "signup",

@@ -10,11 +10,7 @@ export default async function SmsDocsPage() {
   const pages = await getPublishedSmsDocs();
   return (
     <div className="space-y-5">
-      <PageHeader
-        kicker="SMS & OTP"
-        title="Documentation"
-        description="The same guide is public at /docs, so you can share it before someone signs in."
-      />
+      <PageHeader kicker="SMS & OTP" title="API documentation" />
       <DeveloperNav />
       <SmsDocs pages={pages} baseUrl={getAppUrl()} />
     </div>

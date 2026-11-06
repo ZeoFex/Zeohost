@@ -2,7 +2,13 @@ import { prisma } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import { smsConfig } from "@/lib/messaging/config";
 import { MessagingError } from "@/lib/messaging/errors";
-import { createApiKeyMaterial, normalizeScopes, parseScopes, type ApiKeyScope } from "@/lib/security/api-key";
+import {
+  createApiKeyMaterial,
+  normalizeScopes,
+  parseScopes,
+  type ApiKeyEnvironment,
+  type ApiKeyScope,
+} from "@/lib/security/api-key";
 
 const SENDER = /^[A-Za-z0-9][A-Za-z0-9 ]{0,10}$/;
 
@@ -78,6 +84,7 @@ export async function createProjectApiKey(input: {
   projectId: string;
   name: string;
   scopes: string[];
+  environment?: ApiKeyEnvironment;
   expiresAt?: Date | null;
   actorId?: string | null;
 }) {
@@ -87,10 +94,11 @@ export async function createProjectApiKey(input: {
   }
   const scopes = normalizeScopes(input.scopes);
   if (!scopes.length) throw new MessagingError("Choose at least one API key scope.");
+  const environment: ApiKeyEnvironment = input.environment === "PRODUCTION" ? "PRODUCTION" : "DEVELOPMENT";
   const project = await prisma.apiProject.findUnique({ where: { id: input.projectId } });
   if (!project || project.status !== "ACTIVE") throw new MessagingError("Project not found.", 404);
 
-  const material = createApiKeyMaterial();
+  const material = createApiKeyMaterial(environment);
   const key = await prisma.apiKey.create({
     data: {
       projectId: project.id,
@@ -98,6 +106,7 @@ export async function createProjectApiKey(input: {
       prefix: material.prefix,
       secretHash: material.secretHash,
       scopesJson: JSON.stringify(scopes),
+      environment,
       expiresAt: input.expiresAt ?? null,
     },
   });
@@ -106,9 +115,16 @@ export async function createProjectApiKey(input: {
     action: "api_key.created",
     entityType: "ApiKey",
     entityId: key.id,
-    metadata: { projectId: project.id, prefix: key.prefix, scopes },
+    metadata: { projectId: project.id, prefix: key.prefix, scopes, environment },
   });
-  return { id: key.id, prefix: key.prefix, secret: material.token, scopes, name: key.name };
+  return {
+    id: key.id,
+    prefix: key.prefix,
+    secret: material.token,
+    scopes,
+    name: key.name,
+    environment: key.environment,
+  };
 }
 
 export async function revokeProjectApiKey(id: string, actorId?: string | null) {
@@ -137,6 +153,7 @@ export async function rotateProjectApiKey(id: string, actorId?: string | null) {
     projectId: current.projectId,
     name: current.name,
     scopes,
+    environment: current.environment === "PRODUCTION" ? "PRODUCTION" : "DEVELOPMENT",
     expiresAt: current.expiresAt,
     actorId,
   });

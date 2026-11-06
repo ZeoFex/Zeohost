@@ -5,9 +5,9 @@ import { getDatabaseUrl } from "@/lib/env";
 import { seedCatalog } from "@/lib/seed-catalog";
 
 const globalForPrisma = globalThis as typeof globalThis & {
-  __mydomainPrisma?: PrismaClient;
-  __mydomainPool?: Pool;
-  __mydomainSeedStarted?: boolean;
+  __zeohostPrisma?: PrismaClient;
+  __zeohostPool?: Pool;
+  __zeohostSeedStarted?: boolean;
 };
 
 let cachedPrisma: PrismaClient | null = null;
@@ -40,7 +40,7 @@ export async function withDbRetry<T>(fn: () => Promise<T>, attempts = 3): Promis
 
 export function getPostgresPrisma() {
   if (cachedPrisma) return cachedPrisma;
-  if (globalForPrisma.__mydomainPrisma) return globalForPrisma.__mydomainPrisma;
+  if (globalForPrisma.__zeohostPrisma) return globalForPrisma.__zeohostPrisma;
 
   const connectionString = getDatabaseUrl();
   if (!connectionString) {
@@ -48,7 +48,7 @@ export function getPostgresPrisma() {
   }
 
   const pool =
-    globalForPrisma.__mydomainPool ??
+    globalForPrisma.__zeohostPool ??
     new Pool({
       connectionString,
       max: 5,
@@ -58,7 +58,7 @@ export function getPostgresPrisma() {
     });
 
   if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.__mydomainPool = pool;
+    globalForPrisma.__zeohostPool = pool;
   }
 
   const adapter = new PrismaPg(pool);
@@ -71,13 +71,13 @@ export function getPostgresPrisma() {
   });
 
   if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.__mydomainPrisma = client;
+    globalForPrisma.__zeohostPrisma = client;
   } else {
     cachedPrisma = client;
   }
 
-  if (!globalForPrisma.__mydomainSeedStarted) {
-    globalForPrisma.__mydomainSeedStarted = true;
+  if (!globalForPrisma.__zeohostSeedStarted) {
+    globalForPrisma.__zeohostSeedStarted = true;
     void ensureCatalogSeed(client).catch((error) => {
       console.error("Failed to seed catalog tables", error);
     });

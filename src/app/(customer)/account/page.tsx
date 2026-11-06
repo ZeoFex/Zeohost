@@ -8,11 +8,7 @@ export default async function AccountPage() {
   const { user } = await getCustomerContext();
   return (
     <div className="space-y-5">
-      <PageHeader
-        kicker="Profile"
-        title="Account settings"
-        description="Update your profile security, and sign-in details."
-      />
+      <PageHeader kicker="Profile" title="Account settings" />
       <div className="flex items-center gap-3 text-sm text-[var(--muted)]">
         <Settings className="h-4 w-4" />
         Signed in as {user.email}

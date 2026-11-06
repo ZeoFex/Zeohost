@@ -33,7 +33,6 @@ export default async function HostingPage({
       <PageHeader
         kicker="Plans"
         title="Hosting"
-        description="Start with a GitHub preview for 14 days, then buy a plan and connect your domain."
         actions={
           <Link href="/sites" className="btn btn-ghost">
             <Github className="h-4 w-4" />

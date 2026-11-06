@@ -200,7 +200,7 @@ export function AuthForm({
       <div className="nm-site auth-page min-h-screen">
         <header className="nm-header">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-            <Link href="/" aria-label="myDomain home">
+            <Link href="/" aria-label="Zeohost home">
               <Brand light={brandLight} />
             </Link>
             <div className="flex items-center gap-3">

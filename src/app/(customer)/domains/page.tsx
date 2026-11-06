@@ -22,7 +22,6 @@ export default async function DomainsPage() {
       <PageHeader
         kicker="Inventory"
         title="Domains"
-        description="Everything you have registered with myDomain."
         actions={
           <Link href="/search" className="btn btn-hot">
             <Search className="h-4 w-4" />

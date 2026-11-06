@@ -14,7 +14,7 @@ export default async function SupportPage() {
   });
   return (
     <div className="space-y-5">
-      <PageHeader kicker="Help" title="Support" description="Send a message. We keep it simple, no ticket maze." />
+      <PageHeader kicker="Help" title="Support" />
       <SupportForm />
       <section className="card p-5">
         <SectionTitle icon={LifeBuoy} title="Your tickets" />

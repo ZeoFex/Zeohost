@@ -29,10 +29,9 @@ export default async function DeveloperHomePage() {
       <PageHeader
         kicker="SMS & OTP"
         title="SMS & OTP"
-        description="Send one-time verification codes and text messages from your apps. Create a project, issue an API key, and every send is tracked here and in the admin panel."
         actions={
-          <Link href="/docs" className="btn btn-ghost">
-            Public docs
+          <Link href="/sms/docs" className="btn btn-ghost">
+            API docs
           </Link>
         }
       />
@@ -43,13 +42,6 @@ export default async function DeveloperHomePage() {
         <StatCard icon={MessageSquare} label="Usage units" value={usage._sum.units ?? 0} hint="1 SMS = 1 unit" />
         <StatCard icon={ShieldCheck} label="Verified OTPs" value={otpCount} />
       </div>
-      <section className="card p-5">
-        <h2 className="font-bold text-[var(--navy)]">Delivery</h2>
-        <p className="mt-2 text-sm text-[var(--muted)]">
-          Messages are queued and marked delivered by the development mock connector. That receipt is simulated. It is
-          not a message from a mobile network.
-        </p>
-      </section>
       {messages.length ? (
         <div className="card table-wrap">
           <table className="data">
@@ -86,7 +78,12 @@ export default async function DeveloperHomePage() {
           <EmptyState
             icon={MessageSquare}
             title="No messages yet"
-            body="Create a key, then call POST /api/v1/otp/send."
+            body="Create a developer key, then call the API."
+            action={
+              <Link href="/sms/keys" className="btn btn-primary">
+                API keys
+              </Link>
+            }
           />
         </div>
       )}

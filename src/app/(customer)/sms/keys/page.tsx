@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { KeyRound } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getCustomerContext } from "@/lib/page-auth";
@@ -24,7 +25,11 @@ export default async function DeveloperKeysPage() {
       <PageHeader
         kicker="SMS & OTP"
         title="API keys"
-        description="The secret is shown once, when you create or rotate a key. Admins can see the prefix and usage, not the secret."
+        actions={
+          <Link href="/support" className="btn btn-ghost">
+            Request production key
+          </Link>
+        }
       />
       <DeveloperNav />
       <div className="grid gap-4 lg:grid-cols-2">
@@ -38,6 +43,7 @@ export default async function DeveloperKeysPage() {
               <tr>
                 <th>Name</th>
                 <th>Prefix</th>
+                <th>Environment</th>
                 <th>Project</th>
                 <th>Scopes</th>
                 <th>Status</th>
@@ -50,6 +56,7 @@ export default async function DeveloperKeysPage() {
                 <tr key={key.id}>
                   <td className="font-semibold">{key.name}</td>
                   <td className="font-mono text-xs">{key.prefix}</td>
+                  <td>{key.environment === "PRODUCTION" ? "Production" : "Developer"}</td>
                   <td>{key.project.name}</td>
                   <td className="text-xs">{parseScopes(key.scopesJson).join(", ")}</td>
                   <td>
@@ -64,7 +71,7 @@ export default async function DeveloperKeysPage() {
         </div>
       ) : (
         <div className="card">
-          <EmptyState icon={KeyRound} title="No API keys" body="Create a project, then issue a key for that app." />
+          <EmptyState icon={KeyRound} title="No API keys" body="Create a project, then issue a developer key." />
         </div>
       )}
     </div>

@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const dataUri = `data:${file.type};base64,${buffer.toString("base64")}`;
     const uploaded = await uploadCmsImage({
       dataUri,
-      folder: kind === "hero" ? "mydomain/cms/hero" : "mydomain/cms/partners",
+      folder: kind === "hero" ? "zeohost/cms/hero" : "zeohost/cms/partners",
     });
     return jsonOk(uploaded);
   } catch (error) {

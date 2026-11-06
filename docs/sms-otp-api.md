@@ -1,6 +1,6 @@
 # SMS and OTP API
 
-MyDomain exposes a developer messaging API for phone verification and generic SMS. The OTP service creates a challenge and asks the messaging service to queue an SMS. It does not talk to a mobile network itself.
+Zeohost exposes a messaging API for phone verification and generic SMS. You need a customer account to open the in-app docs at `/sms/docs`, create projects, and issue keys. The OTP service creates a challenge and asks the messaging service to queue an SMS.
 
 ## Delivery mode
 
@@ -18,10 +18,10 @@ npm run worker:sms
 
 ## Authentication
 
-Create a project and API key in SMS & OTP at `/sms/keys`. The public guide is at `/docs`. Admins edit that guide from Admin → SMS & OTP docs. The secret is shown once. Admins can still see every project from the admin SMS pages.
+Sign in, open SMS & OTP at `/sms/keys`, create a project, then create a **developer** key (`zh_test_`). Production keys (`zh_live_`) are issued by an admin after a live SMS provider is connected — customers request that through Support. The secret is shown once. Admins edit the customer-facing guide from Admin → SMS & OTP docs.
 
 ```http
-Authorization: Bearer md_live_prefix_secret
+Authorization: Bearer zh_test_prefix_secret
 ```
 
 Scopes:
@@ -121,7 +121,7 @@ Idempotency-Key: 8-to-200-characters
 {
   "to": "+233241234567",
   "message": "Your order is confirmed.",
-  "sender_id": "MyDomain"
+  "sender_id": "Zeohost"
 }
 ```
 
@@ -135,7 +135,7 @@ Idempotency-Key: 8-to-200-characters
 
 The request returns when the message is stored. It does not wait for delivery. Repeating the same `Idempotency-Key` for a project returns the original message.
 
-`sender_id` must be an active sender on the project (1–11 letters or numbers). New projects start with `MyDomain`. That value is a label in MyDomain, not a carrier registration.
+`sender_id` must be an active sender on the project (1–11 letters or numbers). New projects start with `Zeohost`. That value is a label in Zeohost, not a carrier registration.
 
 `GET /api/v1/sms/{message_id}` returns status, a masked destination, route, and timestamps. It does not return the message body.
 

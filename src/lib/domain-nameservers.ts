@@ -1,13 +1,13 @@
-const MOCK_NS_PATTERN = /mockprovider\.com/i;
+const PROVIDER_DEFAULT_NS = /(mockprovider\.com|\.name\.com)$/i;
 
-/** Drop placeholder/mock nameserver values before showing them to customers. */
+/** Keep customer-facing nameserver lists free of wholesale/default placeholders. */
 export function displayNameservers(nameservers: string[]) {
   return nameservers
     .map((ns) => ns.trim())
-    .filter((ns) => ns.length > 0 && !MOCK_NS_PATTERN.test(ns));
+    .filter((ns) => ns.length > 0 && !PROVIDER_DEFAULT_NS.test(ns));
 }
 
 export function isMockNameserverList(nameservers: string[]) {
   if (!nameservers.length) return false;
-  return nameservers.every((ns) => MOCK_NS_PATTERN.test(ns));
+  return nameservers.every((ns) => PROVIDER_DEFAULT_NS.test(ns));
 }

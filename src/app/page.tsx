@@ -17,7 +17,7 @@ export default async function HomePage() {
     const liveCount = await prisma.tldPricing.count({ where: { wholesaleCents: { gt: 0 } } });
     if (liveCount === 0) await syncNamecomPricing({ resetMargins: true });
   } catch {
-    // homepage still renders without live chips if name.com is unreachable
+    // homepage still renders without live chips if pricing sync is unreachable
   }
 
   const [{ home, stats, partners }, live] = await Promise.all([
@@ -170,19 +170,17 @@ export default async function HomePage() {
             <div className="nm-connect mx-auto max-w-6xl px-6 py-12 md:px-10 md:py-14">
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--lime)]">SMS &amp; OTP</p>
               <h2 className="mt-3 max-w-2xl text-3xl font-extrabold tracking-tight nm-text md:text-4xl">
-                Send a verification code, or send a text.
+                Messaging API for OTP and SMS.
               </h2>
               <p className="mt-4 max-w-2xl leading-7 nm-text-muted">
-                SMS &amp; OTP is MyDomain’s messaging product. OTP is a one-time code you send when an app needs to
-                confirm a phone number. SMS is a normal text, such as an order update or a reminder. You create a
-                project, copy an API key, and call MyDomain. Every send shows up in your account.
+                Sign in to create developer keys, read the API docs, and track every send in your account.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/docs" className="btn btn-lime">
-                  See how it works
-                </Link>
-                <Link href="/sms" className="btn btn-ghost-dark">
+                <Link href="/sms" className="btn btn-lime">
                   Open SMS &amp; OTP
+                </Link>
+                <Link href="/sms/docs" className="btn btn-ghost-dark">
+                  API documentation
                 </Link>
               </div>
             </div>

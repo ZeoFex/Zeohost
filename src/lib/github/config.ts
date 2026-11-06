@@ -1,7 +1,7 @@
 import { getAppUrl } from "@/lib/env";
 
 export const GITHUB_OAUTH_SCOPES = "read:user user:email repo";
-export const GITHUB_OAUTH_COOKIE = "mydomain_github_oauth";
+export const GITHUB_OAUTH_COOKIE = "zeohost_github_oauth";
 
 export function githubClientId() {
   return process.env.GITHUB_CLIENT_ID?.trim() ?? "";

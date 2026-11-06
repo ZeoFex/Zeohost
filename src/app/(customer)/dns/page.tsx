@@ -12,11 +12,7 @@ export default async function DnsPage() {
   });
   return (
     <div className="space-y-5">
-      <PageHeader
-        kicker="DNS"
-        title="DNS"
-        description="After you buy a domain, use Connect to Vercel on the domain page — or manage raw records here."
-      />
+      <PageHeader kicker="DNS" title="DNS" />
       {domains.length ? (
         domains.map((domain) => (
           <section key={domain.id} className="card p-5">

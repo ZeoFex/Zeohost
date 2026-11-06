@@ -16,13 +16,13 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "myDomain",
-    template: "%s · myDomain",
+    default: "Zeohost",
+    template: "%s · Zeohost",
   },
   description: "Find a domain, buy it, and launch hosting, simple like Namecheap, built for your business.",
 };
 
-const themeInitScript = `(function(){try{var t=localStorage.getItem("mydomain-theme");if(t!=="light"&&t!=="dark")t="dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
+const themeInitScript = `(function(){try{var t=localStorage.getItem("zeohost-theme");if(t!=="light"&&t!=="dark")t="dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

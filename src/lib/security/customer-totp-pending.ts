@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { getAuthSecret } from "@/lib/session";
 
 const PURPOSE = "customer-2fa";
-export const CUSTOMER_TOTP_PENDING_COOKIE = "mydomain_customer_2fa";
+export const CUSTOMER_TOTP_PENDING_COOKIE = "zeohost_customer_2fa";
 
 export async function createCustomerTotpPendingToken(userId: string) {
   return new SignJWT({ purpose: PURPOSE })
