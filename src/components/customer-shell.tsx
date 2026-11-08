@@ -135,13 +135,13 @@ export function CustomerShell({
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle className="app-theme-toggle" compact />
-            <Link href="/cart" className={`relative grid h-10 w-10 place-items-center rounded-xl border ${border} ${surface}`} aria-label="Cart">
+            <Link
+              href="/cart"
+              className={`relative grid h-10 w-10 place-items-center rounded-xl border ${border} ${surface}`}
+              aria-label={cartCount ? `Cart, ${cartCount} items` : "Cart"}
+            >
               <ShoppingCart className="h-5 w-5 text-[var(--navy)]" />
               {cartCount > 0 ? <span className="cart-badge">{cartCount}</span> : null}
-            </Link>
-            <Link href="/cart" className="btn btn-hot hidden sm:inline-flex">
-              <ShoppingCart className="h-4 w-4" />
-              Cart{cartCount ? ` (${cartCount})` : ""}
             </Link>
           </div>
         </header>

@@ -95,6 +95,9 @@ export type PaymentResult = {
   status: "SUCCESS" | "FAILED" | "PENDING" | "REFUNDED";
   amountCents: number;
   providerRef: string;
+  /** Present when the gateway needs a browser redirect (e.g. Paystack). */
+  authorizationUrl?: string;
+  accessCode?: string;
 };
 
 export interface DomainProvider {

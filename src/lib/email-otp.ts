@@ -94,6 +94,7 @@ export async function sendEmailVerificationOtp(
     subject: message.subject,
     html: message.html,
     text: message.text,
+    purpose: "support",
   });
   if (result.skipped) {
     throw new Error("EMAIL_NOT_CONFIGURED");
@@ -159,6 +160,7 @@ export async function sendWelcomeAfterVerify(user: {
     subject: message.subject,
     html: message.html,
     text: message.text,
+    purpose: "welcome",
   }).catch((mailError) => console.error("Welcome email failed", mailError));
 }
 

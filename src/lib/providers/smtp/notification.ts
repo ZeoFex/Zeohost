@@ -1,5 +1,5 @@
 import type { NotificationProvider } from "@/lib/providers/types";
-import { sendMail } from "@/lib/email/smtp";
+import { purposeForEvent, sendMail } from "@/lib/email/smtp";
 import { notificationEmail } from "@/lib/email/templates";
 
 export class SmtpNotificationProvider implements NotificationProvider {
@@ -26,6 +26,7 @@ export class SmtpNotificationProvider implements NotificationProvider {
       subject: message.subject,
       html: message.html,
       text: message.text,
+      purpose: purposeForEvent(input.event),
     });
   }
 }

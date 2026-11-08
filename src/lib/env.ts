@@ -40,19 +40,34 @@ function normalizePostgresSslMode(connectionString: string) {
   }
 }
 
+function emailFromFromHeader(value: string) {
+  const match = value.match(/<([^>]+)>/);
+  return (match?.[1] ?? value).trim();
+}
+
 export function smtpAuthUser() {
   const user = process.env.SMTP_USER?.trim() ?? "";
   if (user.includes("@")) return user;
   const from = process.env.SMTP_FROM ?? "";
-  const match = from.match(/<([^>]+)>/);
-  return (match?.[1] ?? from).trim();
+  return emailFromFromHeader(from);
+}
+
+function smtpPurposeConfigured(purpose: "WELCOME" | "SUPPORT" | "SALES") {
+  const user =
+    process.env[`SMTP_USER_${purpose}`]?.trim() ||
+    emailFromFromHeader(process.env[`SMTP_FROM_${purpose}`] ?? "");
+  const pass =
+    process.env[`SMTP_PASS_${purpose}`]?.trim() || process.env.SMTP_PASS?.trim();
+  return Boolean(user && pass);
 }
 
 export function isSmtpConfigured() {
-  return Boolean(
-    process.env.SMTP_HOST?.trim() &&
-      process.env.SMTP_PASS?.trim() &&
-      smtpAuthUser(),
+  if (!process.env.SMTP_HOST?.trim()) return false;
+  if (process.env.SMTP_PASS?.trim() && smtpAuthUser()) return true;
+  return (
+    smtpPurposeConfigured("WELCOME") ||
+    smtpPurposeConfigured("SUPPORT") ||
+    smtpPurposeConfigured("SALES")
   );
 }
 

@@ -65,6 +65,15 @@ export function MarketingHeader({ cartCount = 0 }: { cartCount?: number }) {
         </div>
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle compact />
+          <Link
+            href="/cart"
+            className="relative grid h-10 w-10 place-items-center rounded-xl border text-[var(--nm-fg)]"
+            style={{ borderColor: "var(--nm-border)" }}
+            aria-label={cartCount ? `Cart, ${cartCount} items` : "Cart"}
+          >
+            <ShoppingCart className="h-4 w-4" />
+            {cartCount > 0 ? <span className="nm-cart-badge">{cartCount}</span> : null}
+          </Link>
           <button
             className="grid h-10 w-10 place-items-center rounded-xl border text-[var(--nm-fg)]"
             style={{ borderColor: "var(--nm-border)" }}
@@ -89,10 +98,10 @@ export function MarketingHeader({ cartCount = 0 }: { cartCount?: number }) {
               {link.label}
             </Link>
           ))}
-          <Link className="nm-link block rounded-lg px-2 py-2" href="/login">
+          <Link className="nm-link block rounded-lg px-2 py-2" href="/login" onClick={() => setOpen(false)}>
             Sign in
           </Link>
-          <Link className="btn btn-lime mt-2 w-full" href="/register">
+          <Link className="btn btn-lime mt-2 w-full" href="/register" onClick={() => setOpen(false)}>
             Get started
           </Link>
         </div>

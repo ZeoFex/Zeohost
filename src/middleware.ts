@@ -12,7 +12,6 @@ const customerPrefixes = [
   "/orders",
   "/support",
   "/account",
-  "/cart",
   "/checkout",
   "/sms",
 ];

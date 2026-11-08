@@ -21,9 +21,15 @@ export function CheckoutButton() {
     const data = await response.json();
     if (!response.ok) {
       setLoading(false);
-      setError(data.error ?? "We couldn't complete your payment. Please try again.");
+      setError(data.error ?? "We couldn't start your payment. Please try again.");
       return;
     }
+
+    if (data.authorizationUrl) {
+      window.location.href = data.authorizationUrl as string;
+      return;
+    }
+
     const domain = data.registeredDomains?.[0];
     router.push(
       domain
@@ -36,7 +42,7 @@ export function CheckoutButton() {
   return (
     <div>
       <button className="btn btn-hot w-full" onClick={pay} disabled={loading}>
-        <BusyLabel busy={loading} busyText="Processing payment">
+        <BusyLabel busy={loading} busyText="Starting payment">
           <CreditCard className="h-4 w-4" />
           Continue to payment
         </BusyLabel>

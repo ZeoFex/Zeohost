@@ -85,9 +85,20 @@ export async function checkoutCart(input: {
     include: { items: true },
   });
 
-  const paymentResult = await getPaymentProvider().createPayment({
+  const paymentProvider = getPaymentProvider();
+  const method =
+    (process.env.PAYMENT_PROVIDER ?? "mock").trim().toLowerCase() === "mock"
+      ? "mock_card"
+      : "paystack";
+
+  const paymentResult = await paymentProvider.createPayment({
     amountCents: cart.totalCents,
-    metadata: { orderId: order.id, fail: input.fail === true },
+    metadata: {
+      orderId: order.id,
+      email: customer.user.email,
+      customerId: customer.id,
+      fail: input.fail === true,
+    },
   });
 
   const payment = await prisma.payment.create({
@@ -97,8 +108,20 @@ export async function checkoutCart(input: {
       amountCents: cart.totalCents,
       status: paymentResult.status,
       providerRef: paymentResult.providerRef,
+      method,
     },
   });
+
+  if (paymentResult.status === "PENDING" && paymentResult.authorizationUrl) {
+    return {
+      orderId: order.id,
+      paymentId: payment.id,
+      registeredDomains: [] as { id: string; name: string }[],
+      totalCents: cart.totalCents,
+      authorizationUrl: paymentResult.authorizationUrl,
+      status: "PENDING" as const,
+    };
+  }
 
   if (paymentResult.status !== "SUCCESS") {
     await prisma.order.update({
@@ -114,18 +137,111 @@ export async function checkoutCart(input: {
     throw new Error(customerErrors.paymentFailed);
   }
 
-  await prisma.order.update({ where: { id: order.id }, data: { status: "PROCESSING" } });
+  return fulfillPaidOrder({
+    orderId: order.id,
+    paymentId: payment.id,
+    actorId: input.actorId,
+  });
+}
 
-  const invoiceCount = await prisma.invoice.count();
-  await prisma.invoice.create({
-    data: {
-      customerId: input.customerId,
-      orderId: order.id,
-      number: `INV-${String(invoiceCount + 1).padStart(5, "0")}`,
-      amountCents: cart.totalCents,
-      status: "PAID",
+export async function completePaystackCheckout(input: {
+  reference: string;
+  actorId?: string | null;
+}) {
+  const payment = await prisma.payment.findFirst({
+    where: { providerRef: input.reference },
+    include: {
+      order: { include: { items: true, customer: { include: { user: true } } } },
     },
   });
+  if (!payment?.order) throw new Error("We could not find that payment.");
+
+  if (payment.status === "SUCCESS" && payment.order.status === "COMPLETED") {
+    const registrations = await prisma.domainRegistration.findMany({
+      where: { orderId: payment.order.id },
+      include: { domain: { select: { id: true, name: true } } },
+    });
+    return {
+      orderId: payment.order.id,
+      paymentId: payment.id,
+      registeredDomains: registrations.map((row) => row.domain),
+      totalCents: payment.amountCents,
+      status: "COMPLETED" as const,
+    };
+  }
+
+  const verified = await getPaymentProvider().verifyPayment(input.reference);
+  if (verified.status !== "SUCCESS") {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: verified.status },
+    });
+    if (verified.status === "FAILED") {
+      await prisma.order.update({
+        where: { id: payment.order.id },
+        data: { status: "FAILED" },
+      });
+    }
+    throw new Error(customerErrors.paymentFailed);
+  }
+
+  if (
+    verified.amountCents > 0 &&
+    verified.amountCents !== payment.amountCents
+  ) {
+    throw new Error("Paid amount does not match this order.");
+  }
+
+  await prisma.payment.update({
+    where: { id: payment.id },
+    data: { status: "SUCCESS" },
+  });
+
+  return fulfillPaidOrder({
+    orderId: payment.order.id,
+    paymentId: payment.id,
+    actorId: input.actorId ?? payment.order.customer.userId,
+  });
+}
+
+async function fulfillPaidOrder(input: {
+  orderId: string;
+  paymentId: string;
+  actorId: string;
+}) {
+  const order = await prisma.order.findUnique({
+    where: { id: input.orderId },
+    include: {
+      items: true,
+      customer: { include: { user: true } },
+      invoice: true,
+    },
+  });
+  if (!order) throw new Error("Order not found");
+  if (order.status === "COMPLETED") {
+    return {
+      orderId: order.id,
+      paymentId: input.paymentId,
+      registeredDomains: [] as { id: string; name: string }[],
+      totalCents: order.totalCents,
+      status: "COMPLETED" as const,
+    };
+  }
+
+  await prisma.order.update({ where: { id: order.id }, data: { status: "PROCESSING" } });
+
+  if (!order.invoice) {
+    const invoiceCount = await prisma.invoice.count();
+    await prisma.invoice.create({
+      data: {
+        customerId: order.customerId,
+        orderId: order.id,
+        number: `INV-${String(invoiceCount + 1).padStart(5, "0")}`,
+        amountCents: order.totalCents,
+        status: "PAID",
+      },
+    });
+  }
 
   const registeredDomains: { id: string; name: string }[] = [];
   for (const item of order.items) {
@@ -133,7 +249,7 @@ export async function checkoutCart(input: {
     if (item.type === "DOMAIN_REGISTRATION" && meta.domain) {
       try {
         const domain = await registerPurchasedDomain({
-          customerId: input.customerId,
+          customerId: order.customerId,
           domainName: meta.domain,
           years: meta.years ?? 1,
           privacy: Boolean(meta.privacy),
@@ -155,7 +271,7 @@ export async function checkoutCart(input: {
     if (item.type === "DOMAIN_TRANSFER" && meta.domain && meta.authCode) {
       try {
         const domain = await transferPurchasedDomain({
-          customerId: input.customerId,
+          customerId: order.customerId,
           domainName: meta.domain,
           authCode: meta.authCode,
           privacy: Boolean(meta.privacy),
@@ -176,7 +292,7 @@ export async function checkoutCart(input: {
     }
     if (item.type === "HOSTING" && meta.planSlug) {
       await purchaseHosting({
-        customerId: input.customerId,
+        customerId: order.customerId,
         planSlug: meta.planSlug,
         hostingId: meta.hostingId,
         actorId: input.actorId,
@@ -185,9 +301,9 @@ export async function checkoutCart(input: {
   }
 
   await prisma.order.update({ where: { id: order.id }, data: { status: "COMPLETED" } });
-  await clearCart(input.customerId);
+  await clearCart(order.customerId);
   await getNotificationProvider().send({
-    to: customer.user.email,
+    to: order.customer.user.email,
     event: "payment_successful",
     title: "Payment successful",
     body: "Your order is complete.",
@@ -197,14 +313,15 @@ export async function checkoutCart(input: {
     action: "billing.checkout",
     entityType: "Order",
     entityId: order.id,
-    metadata: { totalCents: cart.totalCents },
+    metadata: { totalCents: order.totalCents },
   });
 
   return {
     orderId: order.id,
-    paymentId: payment.id,
+    paymentId: input.paymentId,
     registeredDomains,
-    totalCents: cart.totalCents,
+    totalCents: order.totalCents,
+    status: "COMPLETED" as const,
   };
 }
 

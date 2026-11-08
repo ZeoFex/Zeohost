@@ -71,11 +71,10 @@ export default async function AdminProvidersPage() {
       </section>
 
       <section className="card p-5">
-        <h2 className="font-bold text-[var(--navy)]">Payment (test mode)</h2>
+        <h2 className="font-bold text-[var(--navy)]">Payment</h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          <code className="rounded bg-[#f6f8fb] px-1.5 py-0.5">PAYMENT_PROVIDER=mock</code> — checkout always
-          succeeds with no card charge so you can test domain registration end-to-end. name.com still bills your
-          account credit for real production registers.
+          <code className="rounded bg-[#f6f8fb] px-1.5 py-0.5">PAYMENT_PROVIDER=paystack</code> — customers pay
+          through Paystack before domains are registered. name.com bills your account credit for live registers.
         </p>
       </section>
 
@@ -102,10 +101,11 @@ export default async function AdminProvidersPage() {
         <pre className="mt-3 overflow-auto rounded-xl bg-[#0b1220] p-4 text-white">
 {`DOMAIN_PROVIDER=namecom
 DNS_PROVIDER=namecom
-PAYMENT_PROVIDER=mock
+PAYMENT_PROVIDER=paystack
+NOTIFICATION_PROVIDER=smtp
 NAMECOM_USERNAME=
 NAMECOM_API_TOKEN=
-NAMECOM_ENV=sandbox
+NAMECOM_ENV=production
 NAMECOM_WEBHOOK_URL=${webhookUrl}`}
         </pre>
       </section>

@@ -30,6 +30,7 @@ export async function POST(request: Request) {
         subject: message.subject,
         html: message.html,
         text: message.text,
+        purpose: "support",
       }).catch((mailError) => console.error("Reset email failed", mailError));
     }
     return jsonOk({

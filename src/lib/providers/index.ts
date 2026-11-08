@@ -7,6 +7,8 @@ import { smtpNotificationProvider } from "@/lib/providers/smtp/notification";
 import { namecomDomainProvider } from "@/lib/providers/namecom/domain";
 import { namecomDnsProvider } from "@/lib/providers/namecom/dns";
 import { isNamecomConfigured } from "@/lib/providers/namecom/config";
+import { paystackPaymentProvider } from "@/lib/providers/paystack/payment";
+import { isPaystackConfigured } from "@/lib/providers/paystack/config";
 import { isSmtpConfigured } from "@/lib/env";
 import type {
   DnsProvider,
@@ -59,7 +61,19 @@ export function getDnsProvider(): DnsProvider {
 }
 
 export function getPaymentProvider(): PaymentProvider {
-  switch (driver("PAYMENT_PROVIDER")) {
+  const slug = driver("PAYMENT_PROVIDER");
+  if (
+    (slug === "paystack" || slug === "live" || slug === "production") &&
+    isPaystackConfigured()
+  ) {
+    return paystackPaymentProvider;
+  }
+  if (isPaystackConfigured() && slug !== "mock" && slug !== "none" && slug !== "off") {
+    return paystackPaymentProvider;
+  }
+  switch (slug) {
+    case "paystack":
+      return paystackPaymentProvider;
     case "mock":
     default:
       return mockPaymentProvider;

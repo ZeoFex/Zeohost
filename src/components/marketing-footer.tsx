@@ -43,9 +43,6 @@ export function MarketingFooter() {
             <Link className="nm-link" href="/support">
               Support
             </Link>
-            <Link className="nm-link" href="/cart">
-              Cart
-            </Link>
           </div>
         </div>
       </div>
