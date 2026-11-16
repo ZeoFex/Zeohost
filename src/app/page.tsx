@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -6,9 +7,23 @@ import { MarketingFooter } from "@/components/marketing-footer";
 import { MarketingHeader } from "@/components/marketing-header";
 import { Reveal } from "@/components/reveal";
 import { prisma } from "@/lib/db";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 import { formatUsd } from "@/lib/utils";
 import { syncNamecomPricing } from "@/lib/providers/namecom/sync";
 import { getHomepageCms } from "@/lib/services/cms.service";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: { absolute: `${SITE_NAME} — Buy domains, manage DNS & host sites` },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "https://www.zeohost.store/" },
+  openGraph: {
+    title: `${SITE_NAME} — Domains, hosting & SMS`,
+    description: SITE_TAGLINE,
+    url: "https://www.zeohost.store/",
+  },
+};
 
 const featuredTlds = [".com", ".net", ".org", ".io", ".xyz", ".store", ".co", ".app"];
 
@@ -22,10 +37,12 @@ export default async function HomePage() {
 
   const [{ home, stats, partners }, live] = await Promise.all([
     getHomepageCms(),
-    prisma.tldPricing.findMany({
-      where: { status: "Active", wholesaleCents: { gt: 0 } },
-      orderBy: { tld: "asc" },
-    }),
+    prisma.tldPricing
+      .findMany({
+        where: { status: "Active", wholesaleCents: { gt: 0 } },
+        orderBy: { tld: "asc" },
+      })
+      .catch(() => [] as Awaited<ReturnType<typeof prisma.tldPricing.findMany>>),
   ]);
 
   const chips = featuredTlds

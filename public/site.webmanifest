@@ -1,0 +1,17 @@
+{
+  "name": "Zeohost",
+  "short_name": "Zeohost",
+  "description": "Search and buy domains, manage DNS, and launch hosting with Zeohost.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c8f542",
+  "icons": [
+    {
+      "src": "/brand/mark.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

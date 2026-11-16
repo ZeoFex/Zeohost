@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode, SVGProps } from "react";
+
+type IconComponent = LucideIcon | ComponentType<SVGProps<SVGSVGElement> & { className?: string }>;
 
 export function PageHeader({
   kicker,
@@ -30,7 +32,7 @@ export function StatCard({
   value,
   hint,
 }: {
-  icon: LucideIcon;
+  icon: IconComponent;
   label: string;
   value: string | number;
   hint?: string;
@@ -57,7 +59,7 @@ export function EmptyState({
   body,
   action,
 }: {
-  icon: LucideIcon;
+  icon: IconComponent;
   title: string;
   body: string;
   action?: ReactNode;
@@ -79,7 +81,7 @@ export function SectionTitle({
   title,
   action,
 }: {
-  icon?: LucideIcon;
+  icon?: IconComponent;
   title: string;
   action?: ReactNode;
 }) {

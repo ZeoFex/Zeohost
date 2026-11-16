@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, CreditCard, Globe, RefreshCw, Search, Sparkles } from "lucide-react";
+import { ArrowRight, CreditCard, Globe, RefreshCw, Search } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getCustomerContext } from "@/lib/page-auth";
+import { BrandMark } from "@/components/brand";
 import { StatusBadge } from "@/components/status-badge";
 import { PageHeader, SectionTitle, StatCard, EmptyState } from "@/components/ui";
 import { formatDate } from "@/lib/utils";
@@ -32,7 +33,7 @@ export default async function DashboardPage() {
               Find a domain
             </Link>
             <Link href="/sms" className="btn btn-ghost">
-              <Sparkles className="h-4 w-4" />
+              <BrandMark className="h-4 w-4" />
               SMS & OTP
             </Link>
           </>
@@ -40,7 +41,7 @@ export default async function DashboardPage() {
       />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={Globe} label="Domains" value={domains.length} />
-        <StatCard icon={Sparkles} label="Active" value={active} />
+        <StatCard icon={BrandMark} label="Active" value={active} />
         <StatCard icon={CreditCard} label="Services" value={active} />
         <StatCard icon={RefreshCw} label="Upcoming renewals" value={renewals.length || expiring} />
       </div>

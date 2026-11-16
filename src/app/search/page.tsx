@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { DomainSearch } from "@/components/domain-search";
 import { CustomerShell } from "@/components/customer-shell";
 import { MarketingFooter } from "@/components/marketing-footer";
@@ -7,6 +8,18 @@ import { prisma } from "@/lib/db";
 import { syncNamecomPricing } from "@/lib/providers/namecom/sync";
 import { getSession, SESSION_COOKIE } from "@/lib/session";
 import { TLD_CATALOG } from "@/lib/tlds";
+
+export const metadata: Metadata = {
+  title: "Domain search",
+  description:
+    "Search live domain availability, compare extensions, and add the right name to your cart on Zeohost.",
+  alternates: { canonical: "https://www.zeohost.store/search" },
+  openGraph: {
+    title: "Domain search · Zeohost",
+    description: "Find an available domain and check live prices instantly.",
+    url: "https://www.zeohost.store/search",
+  },
+};
 
 const FEATURED_TLDS = [".com", ".net", ".org", ".io", ".xyz", ".store", ".co", ".app", ".ai", ".dev", ".site", ".online"];
 

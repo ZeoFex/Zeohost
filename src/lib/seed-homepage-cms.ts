@@ -76,22 +76,31 @@ type CmsClient = {
 };
 
 export async function seedHomepageCms(prisma: CmsClient) {
-  await prisma.cmsHome.upsert({
-    where: { slug: "home" },
-    create: { ...DEFAULT_HOME },
-    update: {},
-  });
-  const cardCount = await prisma.cmsPartnerCard.count();
-  if (cardCount === 0) {
-    for (const card of DEFAULT_PARTNER_CARDS) {
-      await prisma.cmsPartnerCard.create({
-        data: {
-          ...card,
-          imagePublicId: "",
-          href: "",
-          active: true,
-        },
-      });
+  try {
+    await prisma.cmsHome.upsert({
+      where: { slug: "home" },
+      create: { ...DEFAULT_HOME },
+      update: {},
+    });
+    const cardCount = await prisma.cmsPartnerCard.count();
+    if (cardCount === 0) {
+      for (const card of DEFAULT_PARTNER_CARDS) {
+        await prisma.cmsPartnerCard.create({
+          data: {
+            ...card,
+            imagePublicId: "",
+            href: "",
+            active: true,
+          },
+        });
+      }
     }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (/Connection terminated|ECONNRESET|timeout|P1001|P1017|P1008/i.test(message)) {
+      console.error("Homepage CMS seed deferred (DB unavailable)", message);
+      return;
+    }
+    throw error;
   }
 }

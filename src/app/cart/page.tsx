@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Search, ShoppingCart } from "lucide-react";
 import { CartView } from "@/components/cart-view";
@@ -7,6 +8,13 @@ import { MarketingHeader } from "@/components/marketing-header";
 import { EmptyState, PageHeader } from "@/components/ui";
 import { prisma } from "@/lib/db";
 import { getSession, SESSION_COOKIE } from "@/lib/session";
+
+export const metadata: Metadata = {
+  title: "Cart",
+  description: "Review domains and hosting in your Zeohost cart before secure checkout.",
+  alternates: { canonical: "https://www.zeohost.store/cart" },
+  robots: { index: false, follow: true },
+};
 
 export default async function CartPage() {
   const session = await getSession(SESSION_COOKIE);

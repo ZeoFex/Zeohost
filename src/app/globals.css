@@ -414,6 +414,13 @@ table.data td {
   color: #3f6212;
 }
 
+.stat-icon:has(svg[viewBox="0 0 64 64"]) {
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border-color: transparent;
+}
+
 [data-theme="dark"] .stat-icon {
   border-color: color-mix(in srgb, var(--lime) 35%, transparent);
   background: color-mix(in srgb, var(--lime) 14%, #1a1a1a);
@@ -692,6 +699,18 @@ table.data td {
   max-width: none;
   margin: 0;
   justify-items: stretch;
+}
+
+/* TLD chips + category cards: desktop only */
+.search-desktop-filters {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .search-desktop-filters {
+    display: grid;
+    gap: 1rem;
+  }
 }
 
 .search-engine .tld-chip {
@@ -1939,20 +1958,8 @@ table.data td {
 
 .search-category-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.65rem;
-}
-
-@media (min-width: 640px) {
-  .search-category-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .search-category-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 .search-category-card {
@@ -2211,13 +2218,7 @@ table.data td {
 .search-engine-dark .tld-chip-row {
   max-width: none;
   margin: 0;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-@media (min-width: 640px) {
-  .search-engine-dark .tld-chip-row {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 @media (min-width: 900px) {
@@ -2568,12 +2569,19 @@ table.data td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--lime) 22%, transparent);
-  color: var(--navy);
   margin-bottom: 0.85rem;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+}
+
+.coming-soon-brand {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.85rem;
+  box-shadow: 0 8px 22px rgba(7, 19, 31, 0.28);
 }
 
 .coming-soon-kicker {

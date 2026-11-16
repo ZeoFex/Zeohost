@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { BrandMark } from "@/components/brand";
 
 export function ComingSoonGate({
   children,
@@ -17,8 +17,8 @@ export function ComingSoonGate({
       </div>
       <div className="coming-soon-overlay">
         <div className="coming-soon-card">
-          <span className="coming-soon-icon">
-            <Sparkles className="h-5 w-5" />
+          <span className="coming-soon-icon" aria-hidden>
+            <BrandMark className="coming-soon-brand" />
           </span>
           <p className="coming-soon-kicker">Not available yet</p>
           <h2 className="coming-soon-title">{title}</h2>

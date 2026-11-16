@@ -1,4 +1,4 @@
-function Mark({ className }: { className?: string }) {
+export function BrandMark({ className }: { className?: string }) {
   return (
     <svg
       className={className}
@@ -38,7 +38,7 @@ export function Brand({
   const large = size === "lg";
   return (
     <div className={`brand ${large ? "is-lg" : ""} ${light ? "is-light" : ""}`}>
-      <Mark className="brand-mark" />
+      <BrandMark className="brand-mark" />
       <span className="brand-word">
         <span className="brand-my">Zeo</span>host
       </span>

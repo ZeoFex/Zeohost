@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { CheckCircle2, Globe, LayoutDashboard, Sparkles } from "lucide-react";
+import { CheckCircle2, Globe, LayoutDashboard } from "lucide-react";
+import { BrandMark } from "@/components/brand";
 
 export default async function SuccessPage({
   searchParams,
@@ -20,7 +21,7 @@ export default async function SuccessPage({
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         {id ? (
           <Link href={`/domains/${id}#connect`} className="btn btn-hot">
-            <Sparkles className="h-4 w-4" />
+            <BrandMark className="h-4 w-4" />
             Connect to Vercel
           </Link>
         ) : null}

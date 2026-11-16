@@ -76,7 +76,9 @@ export function getPostgresPrisma() {
     cachedPrisma = client;
   }
 
-  if (!globalForPrisma.__zeohostSeedStarted) {
+  // Skip eager DB seed during `next build` — workers often lose Neon connections mid-export.
+  const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
+  if (!isBuildPhase && !globalForPrisma.__zeohostSeedStarted) {
     globalForPrisma.__zeohostSeedStarted = true;
     void ensureCatalogSeed(client).catch((error) => {
       console.error("Failed to seed catalog tables", error);

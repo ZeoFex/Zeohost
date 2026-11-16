@@ -11,13 +11,14 @@ import {
   Search,
   ShoppingBag,
   ShoppingCart,
-  Sparkles,
   Star,
   Tag,
   Cpu,
   Flag,
 } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
 import { formatUsd } from "@/lib/utils";
+import { BrandMark } from "@/components/brand";
 import { Spinner } from "@/components/spinner";
 import { useTheme } from "@/components/theme-provider";
 import {
@@ -27,6 +28,8 @@ import {
   TLD_FILTER_TABS,
   type TldFilterTab,
 } from "@/lib/tlds";
+
+type TabIcon = ComponentType<SVGProps<SVGSVGElement> & { className?: string }>;
 
 type Row = {
   domain: string;
@@ -50,7 +53,7 @@ type FeaturedTld = {
   originalCents?: number;
 };
 
-const TAB_ICONS: Record<string, typeof Globe> = {
+const TAB_ICONS: Record<string, TabIcon> = {
   all: Globe,
   popular: Star,
   africa: MapPin,
@@ -59,7 +62,7 @@ const TAB_ICONS: Record<string, typeof Globe> = {
   creative: Palette,
   country: Flag,
   budget: Tag,
-  premium: Sparkles,
+  premium: BrandMark,
 };
 
 export function DomainSearch({
@@ -411,28 +414,30 @@ export function DomainSearch({
   return (
     <div className={`search-engine ${dark ? "search-engine-dark" : ""}`}>
       {searchForm}
-      {tldChips}
 
-      <div className="search-category-grid">
-        {TLD_FILTER_TABS.map((item) => {
-          const Icon = TAB_ICONS[item.id] ?? Globe;
-          const active = tab === item.id;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={`search-category-card ${active ? "is-active" : ""}`}
-              onClick={() => setTab(item.id)}
-            >
-              <Icon className="h-4 w-4 shrink-0" />
-              <span>
-                {item.label}
-                <small>{item.hint}</small>
-              </span>
-              {result ? <em>{tabCounts[item.id] ?? 0}</em> : null}
-            </button>
-          );
-        })}
+      <div className="search-desktop-filters">
+        {tldChips}
+        <div className="search-category-grid">
+          {TLD_FILTER_TABS.map((item) => {
+            const Icon = TAB_ICONS[item.id] ?? Globe;
+            const active = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={`search-category-card ${active ? "is-active" : ""}`}
+                onClick={() => setTab(item.id)}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                <span>
+                  {item.label}
+                  <small>{item.hint}</small>
+                </span>
+                {result ? <em>{tabCounts[item.id] ?? 0}</em> : null}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {error ? (
